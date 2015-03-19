@@ -102,7 +102,6 @@ void insertion_sort(int *a, unsigned int length) {
 unsigned int pivot (int *a, unsigned int izq, unsigned int der){
 	unsigned int i,j;
 	unsigned int piv=izq;
-    printf("pivot pivote: %d\n", piv);
 	i=izq+1;
 	j=der;
 	while(i<=j){
@@ -126,11 +125,8 @@ void quick_sort_rec (int *a, unsigned int length, unsigned int izq, unsigned int
 	unsigned int piv;
 
 	if (der > izq) { 
-        printf("entro en rec\n");
 		piv=pivot(a,izq,der);
-		printf("qs rec pivote: %d\n", piv);
 		quick_sort_rec(a,length,izq,piv-1);
-        printf("hola\n");
 		quick_sort_rec(a,length,piv+1,der);
 
 	}
