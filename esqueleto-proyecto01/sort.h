@@ -34,9 +34,17 @@ struct sorting_stats insertion_sort(int *a, unsigned int length);
 
 */
 
-void quick_sort(int *a, unsigned int length);
+struct sorting_stats quick_sort(int *a, unsigned int length);
 /*
     Sort the array 'a' using the Quick sort algorithm. The resulting sort
+    will be ascending.
+
+    The array 'a' must have exactly 'length' elements.
+
+*/
+struct sorting_stats bubble_sort(int *a, unsigned length);
+/*
+    Sort the array 'a' using the Bubble sort algorithm. The resulting sort
     will be ascending.
 
     The array 'a' must have exactly 'length' elements.

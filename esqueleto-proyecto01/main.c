@@ -11,6 +11,7 @@
 #define INSERTION_SORT 'i'
 #define SELECTION_SORT 's'
 #define QUICK_SORT 'q'
+#define BUBBLE_SORT 'b'
 
 struct sorting_stats resultado;
 
@@ -51,7 +52,7 @@ char print_menu(void) {
 
     printf("Choose the sorting algorithm. Options are:\n"
            "\ts - selection sort\n\ti - insertion sort\n"
-           "\tq - quick sort\n\te - exit this program\n"
+           "\tq - quick sort\n\tb - bubble sortt\n\te - exit this program\n"
            "Please enter your choice: ");
 
     scanf_result = scanf("%c", &result);
@@ -98,14 +99,16 @@ int main(int argc, char *argv[]) {
         option = print_menu();
         switch (option) {
         case INSERTION_SORT:
-            //insertion_sort(array, length);
             resultado = insertion_sort(array, length);
             break;
         case SELECTION_SORT:
             resultado = selection_sort(array, length);
             break;
         case QUICK_SORT:
-            quick_sort(array, length);
+            resultado = quick_sort(array, length);
+            break;
+        case BUBBLE_SORT:
+            resultado = bubble_sort(array, length);
             break;
         case EXIT:
             printf("Exiting.\n");
