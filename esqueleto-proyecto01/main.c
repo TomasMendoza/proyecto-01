@@ -12,6 +12,12 @@
 #define SELECTION_SORT 's'
 #define QUICK_SORT 'q'
 
+struct sorting_stats {
+  unsigned long int comps;
+  unsigned long int swaps;
+};
+
+struct sorting_stats result;
 
 void print_help(char *program_name) {
     /* Print the usage help of this program. */
@@ -116,6 +122,7 @@ int main(int argc, char *argv[]) {
 
     /* show the ordered array in the screen */
     array_dump(array, length);
+    struct_dump(result);
     
     /* check if it is sorted */
     assert(array_is_sorted(array, length));

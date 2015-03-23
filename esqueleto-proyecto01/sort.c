@@ -82,20 +82,26 @@ void selection_sort(int *a, unsigned int length) {
     assert(array_is_sorted(a, length));
 }
 
-void insertion_sort(int *a, unsigned int length) {
+struct sorting_stats insertion_sort(int *a, unsigned int length) {
     assert(array_is_valid(a, length));
 
     /* Needs implementation */
+    struct sorting_stats result;
+    result.comps = 0;
+    result.swaps = 0;
 
    for (unsigned int i = 1; i < length; i++) {
    		int j = i;
+        result.comps = result.comps + 1;
    		while (j>0 && a[j]<a[j-1]){
    			swap(a,j-1,j);
+            result.swaps = result.swaps + 1;
    			j=j-1;
    		}
     }
     /* Check postconditions */
     assert(array_is_sorted(a, length));
+    return (result);
 }
 
 

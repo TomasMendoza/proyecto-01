@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 struct sorting_stats {
-unsigned long int comps;
-unsigned long int swaps;
+    unsigned long int comps;
+    unsigned long int swaps;
 };
 
 bool array_is_sorted(int *a, unsigned int length);
@@ -25,7 +25,7 @@ void selection_sort(int *a, unsigned int length);
 
 */
 
-void insertion_sort(int *a, unsigned int length);
+struct sorting_stats insertion_sort(int *a, unsigned int length);
 /*
     Sort the array 'a' using the Insertion sort algorithm. The resulting sort
     will be ascending.
