@@ -16,7 +16,7 @@ bool array_is_sorted(int *a, unsigned int length);
 */
 
 
-void selection_sort(int *a, unsigned int length);
+struct sorting_stats selection_sort(int *a, unsigned int length);
 /*
     Sort the array 'a' using the Selection sort algorithm. The resulting sort
     will be ascending.

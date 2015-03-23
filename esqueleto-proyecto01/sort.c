@@ -5,6 +5,11 @@
 #include "array_helpers.h"
 #include "sort.h"
 
+struct aux_mpf {
+    unsigned long int comps;
+    unsigned long int minp;
+};
+
 bool array_is_sorted(int *a, unsigned int length) {
     /* Needs implementation */
     bool cre = true;
@@ -48,38 +53,54 @@ void swap(int *a, unsigned int i, unsigned int j) {
 
 }
 
-unsigned int min_pos_from(int *a, unsigned int length, unsigned int i) {
+struct aux_mpf min_pos_from(int *a, unsigned int length, unsigned int i) {
 /*
     Return the position of the minimum value in the array 'a' starting
     at position 'i'. The array 'a' must have exactly 'length' elements,
     and 'i' must be a valid position in the array.
 
 */
+    struct aux_mpf mpf;
+    mpf.comps = 0;
+    mpf.minp = 0;
+
     unsigned int j;
-    unsigned int minp = i;
+    mpf.minp = i;
     j=i+1;
     while  (j < length){
-    	if (a[j]<a[minp]){
-    		minp=j;
+        mpf.comps = mpf.comps + 1;
+    	if (a[j]<a[mpf.minp]){
+    		mpf.minp=j;
     	}
     	j=j+1;
     }
-    return minp;
+    return mpf;
 }
 
-void selection_sort(int *a, unsigned int length) {
+struct sorting_stats selection_sort(int *a, unsigned int length) {
     assert(array_is_valid(a, length));
 
     /* Needs implementation */
+
+    struct sorting_stats result;
+    result.comps = 0;
+    result.swaps = 0;
+
+    struct aux_mpf mpf;
+    mpf.comps = 0;
+    mpf.minp = 0;
+
     unsigned int i = 0;
-    unsigned int minp = 0;
     while (i < length){
-    	minp = min_pos_from(a,length,i);
-    	swap (a,i,minp);
+    	mpf = min_pos_from(a,length,i);
+        result.comps = result.comps + mpf.comps;
+    	swap (a,i,(mpf.minp));
+        result.swaps = result.swaps + 1;
     	i=i+1;
     }
     /* Check postconditions */
     assert(array_is_sorted(a, length));
+    return (result);
 }
 
 struct sorting_stats insertion_sort(int *a, unsigned int length) {

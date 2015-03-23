@@ -12,12 +12,7 @@
 #define SELECTION_SORT 's'
 #define QUICK_SORT 'q'
 
-struct sorting_stats {
-  unsigned long int comps;
-  unsigned long int swaps;
-};
-
-struct sorting_stats result;
+struct sorting_stats resultado;
 
 void print_help(char *program_name) {
     /* Print the usage help of this program. */
@@ -103,10 +98,11 @@ int main(int argc, char *argv[]) {
         option = print_menu();
         switch (option) {
         case INSERTION_SORT:
-            insertion_sort(array, length);
+            //insertion_sort(array, length);
+            resultado = insertion_sort(array, length);
             break;
         case SELECTION_SORT:
-            selection_sort(array, length);
+            resultado = selection_sort(array, length);
             break;
         case QUICK_SORT:
             quick_sort(array, length);
@@ -122,8 +118,8 @@ int main(int argc, char *argv[]) {
 
     /* show the ordered array in the screen */
     array_dump(array, length);
-    struct_dump(result);
-    
+    printf("Comparisons: %lu\n",resultado.comps);
+    printf("Swaps: %lu\n", resultado.swaps );
     /* check if it is sorted */
     assert(array_is_sorted(array, length));
 
