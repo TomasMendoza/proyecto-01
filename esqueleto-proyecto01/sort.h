@@ -3,6 +3,11 @@
 
 #include <stdbool.h>
 
+struct sorting_stats {
+unsigned long int comps;
+unsigned long int swaps;
+};
+
 bool array_is_sorted(int *a, unsigned int length);
 /*
     Returns true if the array is ascending sorted, and false if not.

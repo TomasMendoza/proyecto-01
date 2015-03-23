@@ -9,10 +9,10 @@ bool array_is_sorted(int *a, unsigned int length) {
     /* Needs implementation */
     bool cre = true;
     bool dec = true;
-    unsigned int i = 0;
+    unsigned int i = 1;
 
-    while ( cre && (i < length-1)){
-    	if (a[i]<=a[i+1]) {
+    while ( cre && (i < length)){
+    	if (a[i-1]<=a[i]) {
     		i=i+1;
     	}
     	else {
@@ -20,10 +20,10 @@ bool array_is_sorted(int *a, unsigned int length) {
     	}
     }
 
-    i=0;
+    i=1;
 
-    while (dec && (i < length-1)){
-    	if (a[i]>=a[i+1]){
+    while (dec && (i < length)){
+    	if (a[i-1]>=a[i]){
     		i++;
     	} else {
     		dec = false;
@@ -99,45 +99,60 @@ void insertion_sort(int *a, unsigned int length) {
 }
 
 
-unsigned int pivot (int *a, unsigned int izq, unsigned int der){
-	unsigned int i,j;
-	unsigned int piv=izq;
-	i=izq+1;
-	j=der;
-	while(i<=j){
-		if (a[i]<=a[(piv)]){
-			i=i+1;
-		}
-		else if (a[j]>a[(piv)]){
-			j=j-1;
-		}
-		else if (a[i]>a[(piv)] && a[j]<=a[(piv)]){
-			swap(a,i,j);
-			i=i+1;
-			j=j-1;}
+unsigned int pivot (int *a, unsigned int left, unsigned int right){
+    /* implementation */
+    unsigned int piv = left;
+    unsigned int l = left+1;
+    unsigned int r = right;
+    while (l<=r){
+        printf("Mientras: (%d) <= (%d)\n",l,r);
+        printf(" es  %d <= %d ?\n",a[l],a[piv]);
+        if (a[l]<=a[piv]){
+            printf("Si\n");
+            l++;
+        }
+        //printf(" es  %d > %d ?\n",a[r],a[piv]);
+        else if (a[r]>a[piv]){
+            printf("Si\n");
+            r--;
+        }
+        //printf("%d > %d y %d <= %d\n", a[l],a[piv],a[r],a[piv] );
+        else if (a[l] > a[piv] && a[r] <= a[piv]){
+            printf("Si\n");
+            swap(a,l,r);
+            printf("se cambio la posicion (%d) por la (%d)\n",l,r );
+                for(unsigned int i=0;i<=right;i++){
+                printf("%d,", a[i]);
+            }
+            printf("\n");
+            l++;
+            r--;
+        } 
+    }
+    swap(a,piv,r);
+    piv=r;
+    return piv;
 
-	}
-	swap(a,(piv),j);
-	(piv)=j;
-	return piv;
+
+
 }
-void quick_sort_rec (int *a, unsigned int length, unsigned int izq, unsigned int der){
-	unsigned int piv;
 
-	if (der > izq) { 
-		piv=pivot(a,izq,der);
-		quick_sort_rec(a,length,izq,piv-1);
-		quick_sort_rec(a,length,piv+1,der);
+void quick_sort_rec (int *a, unsigned int length, unsigned int left, unsigned int right){
+    /* implementation */
+    unsigned int piv;
+    if (left < right){
+        piv=pivot(a,left,right);
+        quick_sort_rec(a,length,left,piv-1);
+        quick_sort_rec(a,length,piv+1,right);
+    }
 
-	}
 
 }
 
 void quick_sort(int *a, unsigned int length) {
     assert(array_is_valid(a, length));
-
     /* Needs implementation */
     quick_sort_rec(a,length, 0,length-1);
     /* Check postconditions */
-    assert(array_is_sorted(a, length));
+    //assert(array_is_sorted(a, length));
 }
