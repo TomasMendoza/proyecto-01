@@ -42,7 +42,7 @@ struct sorting_stats quick_sort(int *a, unsigned int length);
     The array 'a' must have exactly 'length' elements.
 
 */
-struct sorting_stats bubble_sort(int *a, unsigned length);
+struct sorting_stats bubble_sort(int *a, unsigned int length);
 /*
     Sort the array 'a' using the Bubble sort algorithm. The resulting sort
     will be ascending.
@@ -50,5 +50,8 @@ struct sorting_stats bubble_sort(int *a, unsigned length);
     The array 'a' must have exactly 'length' elements.
 
 */
+struct sorting_stats ran_quick_sort(int *a, unsigned int length);
+
+struct sorting_stats odd_even_sort(int *a, unsigned int length);
 
 #endif

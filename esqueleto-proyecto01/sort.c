@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "array_helpers.h"
 #include "sort.h"
+#include <time.h>
 
 struct aux_mpf {
     unsigned long int comps;
@@ -60,6 +61,7 @@ void swap(int *a, unsigned int i, unsigned int j) {
 }
 
 struct aux_mpf min_pos_from(int *a, unsigned int length, unsigned int i) {
+
 /*
     Return the position of the minimum value in the array 'a' starting
     at position 'i'. The array 'a' must have exactly 'length' elements,
@@ -116,15 +118,19 @@ struct sorting_stats insertion_sort(int *a, unsigned int length) {
     struct sorting_stats result;
     result.comps = 0;
     result.swaps = 0;
+    int cont;
 
    for (unsigned int i = 1; i < length; i++) {
    		int j = i;
         result.comps = result.comps + 1;
+        cont = 0;
    		while (j>0 && a[j]<a[j-1]){
    			swap(a,j-1,j);
             result.swaps = result.swaps + 1;
    			j=j-1;
+            cont++;
    		}
+        result.comps = result.comps + cont;
     }
     /* Check postconditions */
     assert(array_is_sorted(a, length));
@@ -167,8 +173,9 @@ struct aux_pivot pivot (int *a, int left, int right){
 
 struct sorting_stats quick_sort_rec (int *a, unsigned int length, int left, int right){
     /* implementation */
-    struct aux_pivot result_pivot;
     struct sorting_stats result;
+    struct aux_pivot result_pivot;
+
     struct sorting_stats aux;
     aux.comps = 0;
     aux.swaps = 0;
@@ -176,9 +183,9 @@ struct sorting_stats quick_sort_rec (int *a, unsigned int length, int left, int 
     result.swaps = 0;
 
     if (left < right){
-        result_pivot=pivot(a,left,right);
-        result.comps=result.comps + result_pivot.comps;
-        result.swaps=result.swaps + result_pivot.swaps;
+        result_pivot = pivot(a,left,right);
+        result.comps = result.comps + result_pivot.comps;
+        result.swaps = result.swaps + result_pivot.swaps;
         aux = quick_sort_rec(a,length,left,(result_pivot.piv)-1);
         result.comps = result.comps + aux.comps;
         result.swaps = result.swaps + aux.swaps;
@@ -200,13 +207,125 @@ struct sorting_stats quick_sort(int *a, unsigned int length) {
 
     return(result);
 }
-struct sorting_stats bubble_sort(int *a, unsigned length){
+
+struct sorting_stats bubble_sort(int *a, unsigned int length){
     /*Check preconditions*/
     assert(array_is_valid(a, length));
     /*Implementation*/
     struct sorting_stats result;
+    result.swaps = 0;
+    result.comps = 0;
+    for(unsigned int i=1;i<length;i++){
+        for (unsigned int j = 0; j < length-i ; j++)
+        {
+            result.comps = result.comps + 1;
+            if(a[j]>a[j+1]){
+                swap(a,j,(j+1));
+                result.swaps = result.swaps + 1;
+            }
+        }
+    }
     /*Check postconditions*/
     assert(array_is_sorted(a, length));
     
     return(result);
+}
+
+struct aux_pivot ran_pivot (int *a, int left, int right){
+    /* implementation */
+    srand(time(NULL));
+    struct aux_pivot result_pivot;
+    result_pivot.comps = 0;
+    result_pivot.swaps = 0;
+    result_pivot.piv = left + rand() % (right-left +1);
+
+
+    swap(a,left,result_pivot.piv);
+    result_pivot.piv=left;
+
+    unsigned int l = left+1;
+    unsigned int r = right;
+    while (l<=r){
+        if (a[l]<=a[result_pivot.piv]){
+            result_pivot.comps = result_pivot.comps + 1;
+            l++;
+        }
+        else if (a[r]>a[result_pivot.piv]){
+            result_pivot.comps = result_pivot.comps + 2;
+            r--;
+        }
+        else /*if (a[l] > a[result_pivot.piv] && a[r] <= a[result_pivot.piv])*/{
+            result_pivot.comps = result_pivot.comps + 2;
+            swap(a,l,r);
+            result_pivot.swaps = result_pivot.swaps + 1;
+            l++;
+            r--;
+        } 
+    }
+    swap(a,(result_pivot.piv),r);
+    result_pivot.swaps = result_pivot.swaps + 1;
+    result_pivot.piv=r;
+    return (result_pivot);
+}
+
+struct sorting_stats ran_quick_sort_rec (int *a, unsigned int length, int left, int right){
+    /* implementation */
+    struct sorting_stats result;
+    struct aux_pivot result_pivot;
+
+    struct sorting_stats aux;
+    aux.comps = 0;
+    aux.swaps = 0;
+    result.comps = 0;
+    result.swaps = 0;
+
+    if (left < right){
+        result_pivot = ran_pivot(a,left,right);
+        result.comps = result.comps + result_pivot.comps;
+        result.swaps = result.swaps + result_pivot.swaps;
+        aux = ran_quick_sort_rec(a,length,left,(result_pivot.piv)-1);
+        result.comps = result.comps + aux.comps;
+        result.swaps = result.swaps + aux.swaps;
+        aux = ran_quick_sort_rec(a,length,(result_pivot.piv)+1,right);
+        result.comps = result.comps + aux.comps;
+        result.swaps = result.swaps + aux.swaps;
+    }
+    return(result);
+}
+
+struct sorting_stats ran_quick_sort(int *a, unsigned int length) {
+    assert(array_is_valid(a, length));
+
+    struct sorting_stats result;
+    /* Needs implementation */
+    result = ran_quick_sort_rec(a,length, 0,length-1);
+    /* Check postconditions */
+    assert(array_is_sorted(a, length));
+
+    return(result);
+}
+
+struct sorting_stats odd_even_sort(int *a, unsigned int length){
+    assert(array_is_valid(a, length));
+    
+    struct sorting_stats result;
+    result.comps = 0;
+    result.swaps = 0;
+
+   for (unsigned int i = 1; i < length; i++) {
+        int j = i;
+        result.comps = result.comps + 1;
+        while ((j>0 && (a[j] % 2 == 1 || a[j] % 2 == -1) && a[j-1] % 2 == 0) ||
+              ( j>0 && a[j]<a[j-1] && a[j] % 2 == 0 && a[j-1] % 2 == 0) ||  
+              ( j>0 && a[j]<a[j-1] && (a[j] % 2 == 1 || a[j] % 2 == -1)  && (a[j-1] % 2 == 1 || a[j-1] % 2 == -1))){
+            swap(a,j-1,j);
+            result.swaps = result.swaps + 1;
+            j=j-1;
+        }
+    }
+    /* Check postconditions */
+    //assert(array_is_sorted(a, length));
+    //assert(array_is_sorted(a, length));
+    return(result);
+
 }
